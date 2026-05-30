@@ -1,6 +1,6 @@
 {
   "project": "vrp-runtime-boundary-preview",
-  "generated_at": "2026-05-30T17:23:39Z",
+  "generated_at": "2026-05-30T17:24:40Z",
   "boundary": "external events -\u003e validation decisions -\u003e observable verdicts",
   "events": [
     {
