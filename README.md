@@ -90,21 +90,105 @@ FINAL_VERDICT=BOUNDARY_PRESERVED
 
 ---
 
+Machine Readable Validation Evidence
+
+The runtime boundary preview generates both human-readable and machine-readable validation artifacts.
+
+Run:
+
+go run ./cmd/runtime-boundary-demo
+
+Inspect:
+
+cat validation-report.json
+
+Example:
+
+{
+  "project": "vrp-runtime-boundary-preview",
+  "final_verdict": "BOUNDARY_PRESERVED"
+}
+
+The generated report contains:
+
+- Validation events
+- Observable decisions
+- Validation verdicts
+- Canonical state preservation results
+- Final validation outcome
+
+The objective is to make runtime behavior:
+
+- Observable
+- Reproducible
+- Machine-readable
+- Independently inspectable
+
+---
+
 Boundary Principle
 
 The boundary model is designed around a simple idea:
 
 Failures may enter the system.
+
 Invalid execution must not.
 
 The validation boundary determines whether an external runtime event may affect canonical execution state.
 
 ---
 
-Related Project
+Validation Artifact Flow
+
+External Event
+        ↓
+Validation Decision
+        ↓
+Observable Verdict
+        ↓
+validation-report.json
+
+The validation report provides a structured artifact that can be inspected by engineers, tooling, CI pipelines, or external evaluators.
+
+---
+
+Related Projects
 
 Main validation repository:
 
 https://github.com/Endless33/vrp-validation-kit
 
-The validation kit contains executable artifacts, failure models, invariant mappings, external validation guides, and pilot documentation.
+The validation kit contains:
+
+- Executable validation artifacts
+- Failure models
+- Invariant mappings
+- External validation guides
+- Pilot documentation
+
+Research repository:
+
+https://github.com/Endless33/jumping-vpn-preview
+
+The research repository contains architecture discussions, runtime models, validation evidence, and continuity-oriented protocol research.
+
+---
+
+Current Status
+
+Current observable scenarios:
+
+- Replay rejection
+- Authority rollback rejection
+- Runtime recovery preservation
+- Transport migration preservation
+
+Current validation artifact:
+
+validation-report.json
+
+Current expected outcome:
+
+FINAL_VERDICT=BOUNDARY_PRESERVED
+
+The repository exists to expose observable runtime behavior without exposing proprietary implementation details.
