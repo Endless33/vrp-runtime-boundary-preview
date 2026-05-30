@@ -1,0 +1,40 @@
+{
+  "project": "vrp-runtime-boundary-preview",
+  "generated_at": "2026-05-30T17:23:39Z",
+  "boundary": "external events -\u003e validation decisions -\u003e observable verdicts",
+  "events": [
+    {
+      "name": "replay packet",
+      "category": "replay",
+      "action": "duplicate sequence admitted at boundary",
+      "decision": "rejected",
+      "verdict": "REPLAY_REJECTED",
+      "canonical_state_preserved": true
+    },
+    {
+      "name": "authority rollback",
+      "category": "authority",
+      "action": "candidate epoch attempts rollback",
+      "decision": "rejected",
+      "verdict": "AUTHORITY_ROLLBACK_REJECTED",
+      "canonical_state_preserved": true
+    },
+    {
+      "name": "runtime recovery",
+      "category": "recovery",
+      "action": "snapshot restored after runtime failure",
+      "decision": "preserved",
+      "verdict": "RECOVERY_PRESERVED",
+      "canonical_state_preserved": true
+    },
+    {
+      "name": "transport migration",
+      "category": "transport",
+      "action": "transport changes while session remains canonical",
+      "decision": "preserved",
+      "verdict": "TRANSPORT_MIGRATION_PRESERVED",
+      "canonical_state_preserved": true
+    }
+  ],
+  "final_verdict": "BOUNDARY_PRESERVED"
+}

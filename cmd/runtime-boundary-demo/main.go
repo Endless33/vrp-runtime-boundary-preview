@@ -1,14 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"time"
+)
 
 type BoundaryEvent struct {
-	Name      string
-	Category  string
-	Action    string
-	Decision  string
-	Verdict   string
-	Preserved bool
+	Name      string `json:"name"`
+	Category  string `json:"category"`
+	Action    string `json:"action"`
+	Decision  string `json:"decision"`
+	Verdict   string `json:"verdict"`
+	Preserved bool   `json:"canonical_state_preserved"`
+}
+
+type ValidationReport struct {
+	Project      string          `json:"project"`
+	GeneratedAt  string          `json:"generated_at"`
+	Boundary     string          `json:"boundary"`
+	Events       []BoundaryEvent `json:"events"`
+	FinalVerdict string          `json:"final_verdict"`
 }
 
 func main() {
@@ -51,7 +64,7 @@ func main() {
 		},
 	}
 
-	allPreserved := true
+	finalVerdict := "BOUNDARY_PRESERVED"
 
 	for _, event := range events {
 		fmt.Printf("EVENT: %s\n", event.Name)
@@ -63,14 +76,33 @@ func main() {
 		fmt.Println()
 
 		if !event.Preserved {
-			allPreserved = false
+			finalVerdict = "BOUNDARY_FAILED"
 		}
 	}
 
-	if allPreserved {
-		fmt.Println("FINAL_VERDICT=BOUNDARY_PRESERVED")
-		return
+	report := ValidationReport{
+		Project:      "vrp-runtime-boundary-preview",
+		GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
+		Boundary:     "external events -> validation decisions -> observable verdicts",
+		Events:       events,
+		FinalVerdict: finalVerdict,
 	}
 
-	fmt.Println("FINAL_VERDICT=BOUNDARY_FAILED")
+	if err := writeValidationReport("validation-report.json", report); err != nil {
+		fmt.Printf("REPORT_WRITE_ERROR=%v\n", err)
+		fmt.Println("FINAL_VERDICT=BOUNDARY_FAILED")
+		os.Exit(1)
+	}
+
+	fmt.Printf("REPORT=validation-report.json\n")
+	fmt.Printf("FINAL_VERDICT=%s\n", finalVerdict)
+}
+
+func writeValidationReport(path string, report ValidationReport) error {
+	data, err := json.MarshalIndent(report, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, data, 0644)
 }
