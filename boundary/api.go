@@ -53,3 +53,18 @@ func (a *API) CreateEvidence(
 		message,
 	)
 }
+
+// SwitchTransport performs a public transport replacement.
+func (a *API) SwitchTransport(
+	session *Session,
+	transport *Transport,
+) {
+	if session == nil || transport == nil {
+		return
+	}
+
+	transport.Attach()
+	transport.Activate()
+
+	session.SwitchTransport(transport.ID)
+}
